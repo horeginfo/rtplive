@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/index.html</loc>
+    <loc>https://rtplive.vercel.app</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/pgsoft.html</loc>
+    <loc>https://rtplive.vercel.app/index.html</loc>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/pragmaticplay.html</loc>
+    <loc>https://rtplive.vercel.app/pgsoft.html</loc>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/jili.html</loc>
+    <loc>https://rtplive.vercel.app/pragmaticplay.html</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rtplive.vercel.app/jili.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/megawin.html</loc>
+    <loc>https://rtplive.vercel.app/megawin.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/shadylady.html</loc>
+    <loc>https://rtplive.vercel.app/shadylady.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/habanero.html</loc>
+    <loc>https://rtplive.vercel.app/habanero.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/spadegaming.html</loc>
+    <loc>https://rtplive.vercel.app/spadegaming.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/nolimit.html</loc>
+    <loc>https://rtplive.vercel.app/nolimit.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/fastspin.html</loc>
+    <loc>https://rtplive.vercel.app/fastspin.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yukkk.rtpdetik.it.com/public/joker.html</loc>
+    <loc>https://rtplive.vercel.app/joker.html</loc>
     <priority>0.8</priority>
   </url>
 </urlset>
