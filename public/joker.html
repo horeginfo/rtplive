@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joker Games - RTP LIVE 24/7</title>
+    <meta name="theme-color" content="#021419">
+    <link rel="icon" type="image/x-icon" href="fav/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="fav/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="fav/apple-touch-icon.png">
+    <link rel="manifest" href="fav/site.webmanifest">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(0, 255, 229, 0.1), transparent 30%),
+                radial-gradient(circle at top right, rgba(0, 153, 255, 0.08), transparent 24%),
+                linear-gradient(135deg, #021419 0%, #04252c 42%, #020d12 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .tech-background {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .tech-grid,
+        .tech-aurora,
+        .tech-traces,
+        .tech-scan,
+        .tech-pulses {
+            position: absolute;
+            inset: 0;
+        }
+
+        .tech-grid {
+            background:
+                linear-gradient(rgba(84, 166, 197, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(84, 166, 197, 0.12) 1px, transparent 1px);
+            background-size: 56px 56px;
+            mask-image: radial-gradient(circle at center, black 55%, transparent 100%);
+            opacity: 0.28;
+        }
+
+        .tech-aurora {
+            background:
+                radial-gradient(circle at 15% 25%, rgba(0, 255, 229, 0.2), transparent 22%),
+                radial-gradient(circle at 82% 18%, rgba(0, 170, 255, 0.18), transparent 20%),
+                radial-gradient(circle at 70% 72%, rgba(0, 255, 170, 0.16), transparent 24%),
+                radial-gradient(circle at 28% 78%, rgba(0, 110, 255, 0.14), transparent 22%);
+            filter: blur(38px);
+            opacity: 0.9;
+            animation: aurora-drift 16s ease-in-out infinite alternate;
+        }
+
+        .tech-traces {
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 900'%3E%3Cg fill='none' stroke='%2300e8d7' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' opacity='.75'%3E%3Cpath d='M0 120h140v30h85v-90h130v50h120'/%3E%3Cpath d='M40 340h170v-40h120v90h145'/%3E%3Cpath d='M0 610h230v-65h150v-55h150'/%3E%3Cpath d='M180 820h210v-40h130v-90h150'/%3E%3Cpath d='M690 80h140v40h120v-55h170v90h80'/%3E%3Cpath d='M760 360h180v65h120v-40h140'/%3E%3Cpath d='M820 660h130v60h110v-50h140'/%3E%3C/g%3E%3Cg fill='%2300f4ff' opacity='.9'%3E%3Ccircle cx='225' cy='150' r='5'/%3E%3Ccircle cx='355' cy='110' r='5'/%3E%3Ccircle cx='475' cy='390' r='5'/%3E%3Ccircle cx='530' cy='490' r='5'/%3E%3Ccircle cx='950' cy='425' r='5'/%3E%3Ccircle cx='1060' cy='720' r='5'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 760px 560px;
+            background-repeat: repeat;
+            opacity: 0.52;
+            filter: drop-shadow(0 0 6px rgba(0, 244, 255, 0.35));
+            animation: traces-drift 18s linear infinite;
+        }
+
+        .tech-scan {
+            background:
+                linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.07) 46%, rgba(0, 247, 255, 0.18) 50%, rgba(255, 255, 255, 0.07) 54%, transparent 70%),
+                linear-gradient(90deg, transparent 0%, rgba(0, 247, 255, 0.08) 48%, transparent 52%);
+            background-size: 220% 220%, 100% 5px;
+            background-position: 120% 0, 0 -40%;
+            mix-blend-mode: screen;
+            opacity: 0.7;
+            animation: scan-sweep 9s ease-in-out infinite;
+        }
+
+        .tech-pulses {
+            background:
+                radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.95) 0 2px, rgba(0, 247, 255, 0.45) 5px, transparent 11px),
+                radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.95) 0 2px, rgba(0, 247, 255, 0.45) 5px, transparent 11px),
+                radial-gradient(circle at 34% 72%, rgba(255, 255, 255, 0.95) 0 2px, rgba(0, 247, 255, 0.4) 5px, transparent 10px),
+                radial-gradient(circle at 82% 74%, rgba(255, 255, 255, 0.95) 0 2px, rgba(0, 170, 255, 0.42) 5px, transparent 11px);
+            filter: blur(0.3px);
+            opacity: 0.95;
+            animation: pulse-flicker 5.5s ease-in-out infinite alternate;
+        }
+
+        .header {
+            background: rgba(0,0,0,0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #00d084, #00a6b6);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,212,132,0.3);
+        }
+
+        .marquee-container {
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            background: linear-gradient(90deg, rgba(0, 255, 251, 0.1), rgba(107, 154, 255, 0.1));
+            padding: 2px 0;
+            border-top: 1px solid rgba(0, 255, 242, 0.3);
+        }
+
+        .marquee-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+            animation: scroll-left 15s linear infinite;
+        }
+
+        .marquee-logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .marquee-text {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #94f0e7b1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 20px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 5px;
+            font-size: 2.5rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .filter-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            width: min(100%, 700px);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-box {
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 255, 136, 0.5);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 0;
+            width: auto;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: rgba(0, 255, 136, 1);
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .game-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid rgba(154, 187, 172, 0.5);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,255,136,0.2);
+            border-color: rgba(0, 255, 136, 0.8);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .game-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .game-name {
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.7em;
+        }
+
+        .rtp-display {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 12px;
+        }
+
+        .rtp-text {
+            flex: 0 0 54px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-align: left;
+            letter-spacing: 0.03em;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+        }
+
+        .rtp-bar {
+            --rtp-color-start: #ff3b30;
+            --rtp-color-end: #c71f16;
+            --rtp-fill: 50%;
+            position: relative;
+            flex: 1;
+            min-width: 0;
+            height: 32px;
+            padding: 4px;
+            border-radius: 999px;
+            background: #071b24;
+            border: 4px solid var(--rtp-color-end);
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.08),
+                0 0 14px color-mix(in srgb, var(--rtp-color-end) 45%, transparent);
+            overflow: hidden;
+        }
+
+        .rtp-bar-fill {
+            position: relative;
+            z-index: 1;
+            width: var(--rtp-fill);
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--rtp-color-start), var(--rtp-color-end));
+            overflow: hidden;
+            transition: width 0.35s ease;
+        }
+
+        .rtp-bar-fill::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(7, 27, 36, 0.96) 0 2px,
+                    transparent 2px 10px,
+                    rgba(7, 27, 36, 0.96) 10px 12px
+                );
+            mix-blend-mode: multiply;
+            opacity: 0.95;
+        }
+
+        .rtp-bar-track {
+            position: absolute;
+            inset: 4px;
+            z-index: 0;
+            border-radius: 999px;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.05) 0 2px,
+                    transparent 2px 10px,
+                    rgba(255, 255, 255, 0.05) 10px 12px
+                ),
+                linear-gradient(90deg, rgba(6, 18, 27, 0.75), rgba(6, 18, 27, 0.9));
+            pointer-events: none;
+        }
+
+        .game-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .game-pola,
+        .game-jam-main {
+            padding: 0px;
+            width: 100%;
+            border: 1.5px solid rgba(208, 223, 216, 0.7);
+            background: rgba(124, 133, 129, 0.1);
+            color: #ffffff;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            min-height: 30px;
+            line-height: 1.1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-pola:hover,
+        .game-jam-main:hover {
+            background: rgba(0, 255, 136, 0.25);
+            border-color: rgba(0, 255, 136, 1);
+        }
+
+        .pola-modal,
+        .jam-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .pola-modal.active,
+        .jam-modal.active {
+            display: flex;
+        }
+
+        .pola-modal-content,
+        .jam-modal-content {
+            background: rgba(0 0 0 / 22%);
+            border: 2px solid rgba(0 255 182 / 60%);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            animation: slideInDown 0.4s ease;
+        }
+
+        .pola-modal-header,
+        .jam-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .pola-modal-title,
+        .jam-modal-title {
+            color: #00ff88;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .pola-close-btn,
+        .jam-close-btn {
+            background: none;
+            border: none;
+            color: #00ff88;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pola-close-btn:hover,
+        .jam-close-btn:hover {
+            color: #ff6b6b;
+        }
+
+        .pola-container,
+        .jam-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pola-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 12px 15px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1.5px solid rgba(0, 255, 136, 0.4);
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .pola-item:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.8);
+            transform: translateX(5px);
+        }
+
+        .pola-value {
+            text-align: left;
+        }
+
+        .pola-value.off {
+            color: #ff6b6b;
+        }
+
+        .jam-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 15px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1.5px solid rgba(0, 255, 136, 0.4);
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .jam-item:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.8);
+            transform: translateX(5px);
+        }
+
+        .jam-item .title {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .jam-item .time {
+            color: #00ff88;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .pola-update-info,
+        .jam-update-info {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: rgba(0, 255, 136, 0.7);
+        }
+
+        .no-results {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 1.2rem;
+            padding: 40px 20px;
+            display: none;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes aurora-drift {
+            0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+            50% { transform: translate3d(2%, 2%, 0) scale(1.08); }
+            100% { transform: translate3d(-1%, 3%, 0) scale(1.02); }
+        }
+
+        @keyframes traces-drift {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-90px, -50px, 0); }
+        }
+
+        @keyframes scan-sweep {
+            0% {
+                background-position: 120% 0, 0 -40%;
+                opacity: 0.35;
+            }
+            50% {
+                background-position: 40% 0, 0 55%;
+                opacity: 0.82;
+            }
+            100% {
+                background-position: -30% 0, 0 140%;
+                opacity: 0.35;
+            }
+        }
+
+        @keyframes pulse-flicker {
+            0% {
+                opacity: 0.45;
+                transform: scale(1);
+            }
+            35% {
+                opacity: 0.95;
+                transform: scale(1.02);
+            }
+            100% {
+                opacity: 0.65;
+                transform: scale(0.98);
+            }
+        }
+
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ffd700, #ff6b6b);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.8rem;
+                margin-bottom: 25px;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .filter-section {
+                gap: 12px;
+                width: 100%;
+                max-width: 520px;
+            }
+
+            .container {
+                padding: 100px 15px 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .game-image {
+                height: 150px;
+            }
+
+            .game-info {
+                padding: 10px;
+            }
+
+            .back-button {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+                flex-shrink: 0;
+            }
+
+            .filter-section {
+                gap: 10px;
+                width: 100%;
+            }
+
+            .search-box {
+                padding: 10px 14px;
+                font-size: 0.95rem;
+            }
+
+            .tech-traces {
+                background-size: 620px 500px;
+                opacity: 0.44;
+            }
+
+            .tech-grid {
+                background-size: 48px 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tech-background" aria-hidden="true">
+        <div class="tech-grid"></div>
+        <div class="tech-aurora"></div>
+        <div class="tech-traces"></div>
+        <div class="tech-scan"></div>
+        <div class="tech-pulses"></div>
+    </div>
+
+    <div class="header">
+        <div class="marquee-container">
+            <div class="marquee-content">
+                <img src="assets/images/logo/logohoreg2.png" alt="HOREG22 Logo" class="marquee-logo">
+                <span class="marquee-text">INFO RTP LIVE 24/7 SLOT GACOR HANYA DI </span>
+                <img src="assets/images/logo/logohoreg2.png" alt="HOREG22 Logo" class="marquee-logo">
+                <span class="marquee-text">INFO RTP LIVE 24/7 SLOT GACOR HANYA DI</span>
+                <img src="assets/images/logo/logohoreg2.png" alt="HOREG22 Logo" class="marquee-logo">
+                <span class="marquee-text">INFO RTP LIVE 24/7 SLOT GACOR HANYA DI</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">RTP LIVE Game Joker</h1>
+
+        <div class="filter-section">
+            <a href="index.html" class="back-button">Kembali</a>
+            <input id="searchInput" class="search-box" type="text" placeholder="Cari game Joker...">
+        </div>
+
+        <div class="games-grid" id="gamesGrid"></div>
+        <div class="no-results" id="noResults">Game tidak ditemukan.</div>
+    </div>
+
+    <div class="pola-modal" id="polaModal">
+        <div class="pola-modal-content">
+            <div class="pola-modal-header">
+                <div class="pola-modal-title" id="polaGameName">Pola</div>
+                <button class="pola-close-btn" id="polaCloseBtn" type="button">&times;</button>
+            </div>
+            <div class="pola-container" id="polaContainer"></div>
+            <div class="pola-update-info">Pola Joker Akurat dan Jitu untuk saat ini.</div>
+        </div>
+    </div>
+
+    <div class="jam-modal" id="jamModal">
+        <div class="jam-modal-content">
+            <div class="jam-modal-header">
+                <div class="jam-modal-title" id="jamGameName">Jam Main</div>
+                <button class="jam-close-btn" id="jamCloseBtn" type="button">&times;</button>
+            </div>
+            <div class="jam-container" id="jamContainer"></div>
+            <div class="jam-update-info">Jam Main Joker untuk di waktu tertentu</div>
+        </div>
+    </div>
+
+    <script>
+        const gamesData = [
+            { name: 'Ancient Rome Deluxe AI' },
+            { name: 'Archer' },
+            { name: 'Azteca' },
+            { name: 'Beach Life' },
+            { name: 'Big Game Safari' },
+            { name: 'Blockade Runner' },
+            { name: 'Bonus Bear' },
+            { name: 'Burning Pearl' },
+            { name: 'Captains Treasure Progressive' },
+            { name: 'China' },
+            { name: 'Crypto Mania' },
+            { name: 'Cursed Deluxe AI' },
+            { name: 'Dolphins Pearl Deluxe' },
+            { name: 'Dragon Power Flame' },
+            { name: 'Fat Choy Choy Sun' },
+            { name: 'Fei Long Zai Tian' },
+            { name: 'Fifty Dragons' },
+            { name: 'Fire Reign' },
+            { name: 'Fortune Clover 40' },
+            { name: 'Fortune Crown AI' },
+            { name: 'Fortune Crown' },
+            { name: 'Gates Of Wealth' },
+            { name: 'Geisha' },
+            { name: 'Golden Dragon' },
+            { name: 'Golden Monkey King' },
+            { name: 'Golden Rooster' },
+            { name: 'Great Blue' },
+            { name: 'Heavenly Beasts' },
+            { name: 'Highway Kings' },
+            { name: 'HighwayKings JP' },
+            { name: 'Hot Fruits' },
+            { name: 'Joker Madness' },
+            { name: 'Kraken Hunter' },
+            { name: 'Lucky Drum' },
+            { name: 'Lucky God Progressive 2' },
+            { name: 'Lucky God Progressive' },
+            { name: 'Lucky Streak' },
+            { name: 'Mahjong King' },
+            { name: 'Mahjong Reactor' },
+            { name: 'Mayan Gems' },
+            { name: 'Money Vault' },
+            { name: 'MoneyBangBang' },
+            { name: 'Neptune Treasure' },
+            { name: 'Panther Moon' },
+            { name: 'Power Stars' },
+            { name: 'Queen' },
+            { name: 'Respin Mania' },
+            { name: 'Roma Deluxe' },
+            { name: 'Roma Legacy' },
+            { name: 'Roma' },
+            { name: 'Safari Heat' },
+            { name: 'Santa Surprise' },
+            { name: 'Santa Workshop' },
+            { name: 'Scheherazade' },
+            { name: 'Sizzling Hot' },
+            { name: 'Supreme Caishen' },
+            { name: 'Thunder God' },
+            { name: 'Winter Sweets' },
+            { name: 'Wukong' },
+            { name: 'Zhao Cai Jin Bao' }
+        ];
+
+        window.providerDashboardConfig = {
+            providerKey: 'joker',
+            imageFolder: 'assets/images/joker',
+            gamesData: gamesData,
+            polaPreset: 'dual',
+            polaTitleMode: 'prefix',
+            autoPatternList: [10, 20, 25, 50, 100],
+            manualPatternList: [15, 30, 45, 60],
+            turboOptions: ['POWER-UPS COST-1', 'POWER-UPS COST-2', 'POWER-UPS COST-3']
+        };
+    </script>
+    <script src="assets/js/provider-dashboard.js"></script>
+</body>
+</html>

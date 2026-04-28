@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pragmatic Play Games - RTP LIVE 24/7</title>
+    <meta name="theme-color" content="#021419">
+    <link rel="icon" type="image/x-icon" href="fav/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="fav/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="fav/apple-touch-icon.png">
+    <link rel="manifest" href="fav/site.webmanifest">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(0, 255, 229, 0.1), transparent 30%),
+                radial-gradient(circle at top right, rgba(0, 153, 255, 0.08), transparent 24%),
+                linear-gradient(135deg, #021419 0%, #04252c 42%, #020d12 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .tech-background {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .tech-grid,
+        .tech-aurora,
+        .tech-traces,
+        .tech-scan,
+        .tech-pulses {
+            position: absolute;
+            inset: 0;
+        }
+
+        .tech-grid {
+            background:
+                linear-gradient(rgba(84, 166, 197, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(84, 166, 197, 0.12) 1px, transparent 1px);
+            background-size: 56px 56px;
+            mask-image: radial-gradient(circle at center, black 55%, transparent 100%);
+            opacity: 0.28;
+        }
+
+        .tech-aurora {
+            background:
+                radial-gradient(circle at 15% 25%, rgba(0, 255, 229, 0.2), transparent 22%),
+                radial-gradient(circle at 82% 18%, rgba(0, 170, 255, 0.18), transparent 20%),
+                radial-gradient(circle at 70% 72%, rgba(0, 255, 170, 0.16), transparent 24%),
+                radial-gradient(circle at 28% 78%, rgba(0, 110, 255, 0.14), transparent 22%);
+            filter: blur(38px);
+            opacity: 0.9;
+            animation: aurora-drift 16s ease-in-out infinite alternate;
+        }
+
+        .tech-traces {
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 900'%3E%3Cg fill='none' stroke='%2300e8d7' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' opacity='.75'%3E%3Cpath d='M0 120h140v30h85v-90h130v50h120'/%3E%3Cpath d='M40 340h170v-40h120v90h145'/%3E%3Cpath d='M0 610h230v-65h150v-55h150'/%3E%3Cpath d='M180 820h210v-40h130v-90h150'/%3E%3Cpath d='M690 80h140v40h120v-55h170v90h80'/%3E%3Cpath d='M760 360h180v65h120v-40h140'/%3E%3Cpath d='M820 660h130v60h110v-50h140'/%3E%3C/g%3E%3Cg fill='%2300f4ff' opacity='.9'%3E%3Ccircle cx='225' cy='150' r='5'/%3E%3Ccircle cx='355' cy='110' r='5'/%3E%3Ccircle cx='475' cy='390' r='5'/%3E%3Ccircle cx='530' cy='490' r='5'/%3E%3Ccircle cx='950' cy='425' r='5'/%3E%3Ccircle cx='1060' cy='720' r='5'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 760px 560px;
+            background-repeat: repeat;
+            opacity: 0.52;
+            filter: drop-shadow(0 0 6px rgba(0, 244, 255, 0.35));
+            animation: traces-drift 18s linear infinite;
+        }
+
+        .tech-scan {
+            background:
+                linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.07) 46%, rgba(0, 247, 255, 0.18) 50%, rgba(255, 255, 255, 0.07) 54%, transparent 70%),
+                linear-gradient(90deg, transparent 0%, rgba(0, 247, 255, 0.08) 48%, transparent 52%);
+            background-size: 220% 220%, 100% 5px;
+            background-position: 120% 0, 0 -40%;
+            mix-blend-mode: screen;
+            opacity: 0.7;
+            animation: scan-sweep 9s ease-in-out infinite;
+        }
+
+        .tech-pulses {
+            background:
+                radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.95) 0 2px, rgba(0, 247, 255, 0.45) 5px, transparent 11px),
+                radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.95) 0 2px, rgba(0, 247, 255, 0.45) 5px, transparent 11px),
+                radial-gradient(circle at 34% 72%, rgba(255, 255, 255, 0.95) 0 2px, rgba(0, 247, 255, 0.4) 5px, transparent 10px),
+                radial-gradient(circle at 82% 74%, rgba(255, 255, 255, 0.95) 0 2px, rgba(0, 170, 255, 0.42) 5px, transparent 11px);
+            filter: blur(0.3px);
+            opacity: 0.95;
+            animation: pulse-flicker 5.5s ease-in-out infinite alternate;
+        }
+
+        .header {
+            background: rgba(0,0,0,0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+        }
+
+        .logo img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .header-title {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #00d084, #00a6b6);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,212,132,0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 20px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 5px;
+            font-size: 2.5rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .game-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid rgba(154, 187, 172, 0.5);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,255,136,0.2);
+            border-color: rgba(0, 255, 136, 0.8);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .game-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .game-name {
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .game-rtp {
+            background: linear-gradient(135deg, #ffd700, #ff6b6b);
+            color: #000;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .rtp-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .rtp-text {
+            flex: 0 0 54px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-align: left;
+            letter-spacing: 0.03em;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+        }
+
+        .rtp-bar {
+            --rtp-color-start: #ff3b30;
+            --rtp-color-end: #c71f16;
+            --rtp-fill: 50%;
+            position: relative;
+            flex: 1;
+            min-width: 0;
+            height: 32px;
+            padding: 4px;
+            border-radius: 999px;
+            background: #071b24;
+            border: 4px solid var(--rtp-color-end);
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.08),
+                0 0 14px color-mix(in srgb, var(--rtp-color-end) 45%, transparent);
+            overflow: hidden;
+        }
+
+        .rtp-bar-fill {
+            position: relative;
+            z-index: 1;
+            width: var(--rtp-fill);
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--rtp-color-start), var(--rtp-color-end));
+            overflow: hidden;
+            transition: width 0.35s ease;
+        }
+
+        .rtp-bar-fill::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(7, 27, 36, 0.96) 0 2px,
+                    transparent 2px 10px,
+                    rgba(7, 27, 36, 0.96) 10px 12px
+                );
+            mix-blend-mode: multiply;
+            opacity: 0.95;
+        }
+
+        .rtp-bar-track {
+            position: absolute;
+            inset: 4px;
+            z-index: 0;
+            border-radius: 999px;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.05) 0 2px,
+                    transparent 2px 10px,
+                    rgba(255, 255, 255, 0.05) 10px 12px
+                ),
+                linear-gradient(90deg, rgba(6, 18, 27, 0.75), rgba(6, 18, 27, 0.9));
+            pointer-events: none;
+        }
+
+        .game-details {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .game-pola,
+        .game-jam-main {
+            padding: 6px 12px;
+            border: 1.5px solid rgba(208, 223, 216, 0.7);
+            background: rgba(124, 133, 129, 0.1);
+            color: #ffffff;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .game-pola:hover,
+        .game-jam-main:hover {
+            background: rgba(0, 255, 136, 0.25);
+            border-color: rgba(0, 255, 136, 1);
+            
+        }
+
+        /* Modal Pola Styles */
+        .pola-modal,
+        .jam-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .pola-modal.active,
+        .jam-modal.active {
+            display: flex;
+        }
+
+        .pola-modal-content,
+        .jam-modal-content {
+            background: rgba(0 0 0 / 22%);
+            border: 2px solid rgba(0 255 182 / 60%);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: none;
+            animation: slideInDown 0.4s ease;
+        }
+
+        .pola-modal-header,
+        .jam-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .pola-modal-title,
+        .jam-modal-title {
+            color: #00ff88;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .pola-close-btn,
+        .jam-close-btn {
+            background: none;
+            border: none;
+            color: #00ff88;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pola-close-btn:hover,
+        .jam-close-btn:hover {
+            color: #ff6b6b;
+        }
+
+        .pola-container,
+        .jam-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pola-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1.5px solid rgba(0, 255, 136, 0.4);
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .pola-item:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.8);
+            transform: translateX(5px);
+        }
+
+        .jam-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 15px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1.5px solid rgba(0, 255, 136, 0.4);
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .jam-item:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.8);
+            transform: translateX(5px);
+        }
+
+        .jam-item .title {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .jam-item .time {
+            color: #00ff88;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-group .green {
+            color: #00ff88;
+            font-size: 1.2rem;
+        }
+
+        .status-group .red {
+            color: #ff6b6b;
+            font-size: 1.2rem;
+        }
+
+        .red-box {
+            width: 17px;
+            height: 17px;
+            background: #ff0000;
+            border-radius: 0px;
+        }
+
+        .pola-update-info,
+        .jam-update-info {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: rgba(0, 255, 136, 0.7);
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes aurora-drift {
+            0% {
+                transform: translate3d(-2%, -1%, 0) scale(1);
+            }
+            50% {
+                transform: translate3d(2%, 2%, 0) scale(1.08);
+            }
+            100% {
+                transform: translate3d(-1%, 3%, 0) scale(1.02);
+            }
+        }
+
+        @keyframes traces-drift {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+            100% {
+                transform: translate3d(-90px, -50px, 0);
+            }
+        }
+
+        @keyframes scan-sweep {
+            0% {
+                background-position: 120% 0, 0 -40%;
+                opacity: 0.35;
+            }
+            50% {
+                background-position: 40% 0, 0 55%;
+                opacity: 0.82;
+            }
+            100% {
+                background-position: -30% 0, 0 140%;
+                opacity: 0.35;
+            }
+        }
+
+        @keyframes pulse-flicker {
+            0% {
+                opacity: 0.45;
+                transform: scale(1);
+            }
+            35% {
+                opacity: 0.95;
+                transform: scale(1.02);
+            }
+            100% {
+                opacity: 0.65;
+                transform: scale(0.98);
+            }
+        }
+
+        .filter-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            width: min(100%, 520px);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-box {
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 255, 136, 0.5);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 0;
+            width: auto;
+            max-width: none;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: rgba(0, 255, 136, 1);
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .no-results {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 1.2rem;
+            padding: 40px 20px;
+        }
+
+        /* Marquee/Scrolling Text */
+        .marquee-container {
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            background: linear-gradient(90deg, rgba(0, 255, 251, 0.1), rgba(107, 154, 255, 0.1));
+            padding: 2px 0;
+            border-top: 1px solid rgba(0, 255, 242, 0.3);
+        }
+
+        .marquee-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+            animation: scroll-left 15s linear infinite;
+        }
+
+        .marquee-logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .marquee-text {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #94f0e7b1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ffd700, #ff6b6b);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.8rem;
+                margin-bottom: 25px;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .filter-section {
+                gap: 12px;
+                width: 100%;
+                max-width: 420px;
+            }
+
+            .container {
+                padding: 100px 15px 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .game-image {
+                height: 150px;
+            }
+
+            .game-info {
+                padding: 10px;
+            }
+
+            .back-button {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+                flex-shrink: 0;
+            }
+
+            .filter-section {
+                gap: 10px;
+                width: 100%;
+            }
+
+            .search-box {
+                padding: 10px 14px;
+                font-size: 0.95rem;
+            }
+
+            .tech-traces {
+                background-size: 620px 500px;
+                opacity: 0.44;
+            }
+
+            .tech-grid {
+                background-size: 48px 48px;
+            }
+
+            .tech-aurora {
+                filter: blur(28px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tech-background" aria-hidden="true">
+        <div class="tech-grid"></div>
+        <div class="tech-aurora"></div>
+        <div class="tech-traces"></div>
+        <div class="tech-scan"></div>
+        <div class="tech-pulses"></div>
+    </div>
+    <div class="header">
+        <div class="marquee-container">
+            <div class="marquee-content">
+                <img src="assets/images/logo/logohoreg2.png" alt="HOREG22 Logo" class="marquee-logo">
+                <span class="marquee-text">INFO RTP LIVE 24/7 SLOT GACOR HANYA DI </span>
+                <img src="assets/images/logo/logohoreg2.png" alt="HOREG22 Logo" class="marquee-logo">
+                <span class="marquee-text">INFO RTP LIVE 24/7 SLOT GACOR HANYA DI</span>
+                <img src="assets/images/logo/logohoreg2.png" alt="HOREG22 Logo" class="marquee-logo">
+                <span class="marquee-text">INFO RTP LIVE 24/7 SLOT GACOR HANYA DI</span>
+                <img src="assets/images/logo/logohoreg2.png" alt="HOREG22 Logo" class="marquee-logo">
+                <span class="marquee-text">INFO RTP LIVE 24/7 SLOT GACOR HANYA DI </span>
+                <img src="assets/images/logo/logohoreg2.png" alt="HOREG22 Logo" class="marquee-logo">
+                <span class="marquee-text">INFO RTP LIVE 24/7 SLOT GACOR HANYA DI</span>
+                <img src="assets/images/logo/logohoreg2.png" alt="HOREG22 Logo" class="marquee-logo">
+                <span class="marquee-text">INFO RTP LIVE 24/7 SLOT GACOR HANYA DI</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">RTP LIVE Game Pragmatic Play</h1>
+        
+        <div class="filter-section">
+            <a href="index.html" class="back-button">Kembali</a>
+            <input type="text" class="search-box" id="searchInput" placeholder="Cari game...">
+        </div>
+
+        <div class="games-grid" id="gamesGrid">
+            <!-- Games will be loaded here by JavaScript -->
+        </div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            Tidak ada game yang ditemukan
+        </div>
+    </div>
+
+    <!-- Modal Pola -->
+    <div class="pola-modal" id="polaModal">
+        <div class="pola-modal-content">
+            <div class="pola-modal-header">
+                <h2 class="pola-modal-title" id="polaGameName">Pola Game</h2>
+                <button class="pola-close-btn" id="polaCloseBtn">&times;</button>
+            </div>
+            <div class="pola-container" id="polaContainer">
+                <!-- Pola items will be loaded here -->
+            </div>
+            <div class="pola-update-info">
+                Pola Pragmatic Play Akurat dan jitu saat ini
+            </div>
+        </div>
+    </div>
+
+    <div class="jam-modal" id="jamModal">
+        <div class="jam-modal-content">
+            <div class="jam-modal-header">
+                <h2 class="jam-modal-title" id="jamGameName">Jam Main</h2>
+                <button class="jam-close-btn" id="jamCloseBtn">&times;</button>
+            </div>
+            <div class="jam-container" id="jamContainer">
+                <!-- Jam items will be loaded here -->
+            </div>
+            <div class="jam-update-info">
+                Jam Main Pragmatic Play Untuk Di waktu Tertentu
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data RTP untuk setiap game
+        const gamesData = [
+            { name: '3 Buzzing Wilds' },
+            { name: '3 Dancing Monkeys' },
+            { name: '3 Genie Wishes' },
+            { name: '3 Kingdoms - Battle of Red Cliffs' },
+            { name: '3 Magic Eggs' },
+            { name: '5 Frozen Charms Megaways' },
+            { name: '5 Lions Dance' },
+            { name: '5 Lions Gold' },
+            { name: '5 Lions Megaways 2' },
+            { name: '5 Lions Megaways' },
+            { name: '5 Lions Reborn' },
+            { name: '5 Lions' },
+            { name: '5 Rabbits Megaways' },
+            { name: '6 Jokers' },
+            { name: '7 Clovers of Fortune' },
+            { name: '7 Monkeys' },
+            { name: '7 Piggies' },
+            { name: '777 Rush' },
+            { name: '8 Dragons' },
+            { name: '8 Golden Dragon Challenge' },
+            { name: '888 Bonanza' },
+            { name: '888 Dragons' },
+            { name: '888 Gold' },
+            { name: 'African Elephant' },
+            { name: 'Aladdin and the Sorcerer' },
+            { name: 'Alien Invaders' },
+            { name: 'Amazing Money Machine' },
+            { name: 'Anaconda Gold' },
+            { name: 'Ancient Egypt Classic' },
+            { name: 'Ancient Egypt' },
+            { name: 'Ancient Island Megaways' },
+            { name: 'Angel vs Sinner' },
+            { name: 'Anime Mecha Megaways' },
+            { name: 'Argonauts' },
+            { name: 'Asgard' },
+            { name: 'Aztec Blaze' },
+            { name: 'Aztec Bonanza' },
+            { name: 'Aztec Gems Deluxe' },
+            { name: 'Aztec Gems Megaways' },
+            { name: 'Aztec Gems' },
+            { name: 'Aztec King Megaways' },
+            { name: 'Aztec Powernudge' },
+            { name: 'Aztec Smash' },
+            { name: 'Aztec Treasure Hunt' },
+            { name: 'Badge Blitz' },
+            { name: 'Bandit Megaways' },
+            { name: 'Barn Festival' },
+            { name: 'Barnyard Megahays Megaways' },
+            { name: 'Bee Keeper' },
+            { name: 'Beware The Deep Megaways' },
+            { name: 'Big Bass - Hold & Spinner' },
+            { name: 'Big Bass Amazon Xtreme' },
+            { name: 'Big Bass Bonanza - Keeping it Reel' },
+            { name: 'Big Bass Bonanza 1000' },
+            { name: 'Big Bass Bonanza 3 Reeler' },
+            { name: 'Big Bass Bonanza â€“ Reel Action' },
+            { name: 'Big Bass Bonanza Megaways' },
+            { name: 'Big Bass Bonanza' },
+            { name: 'Big Bass Boxing Bonus Round' },
+            { name: 'Big Bass Christmas â€“ Frozen Lake' },
+            { name: 'Big Bass Christmas Bash' },
+            { name: 'Big Bass Day at the Races' },
+            { name: 'Big Bass Dice' },
+            { name: 'Big Bass Floats My Boat' },
+            { name: 'Big Bass Halloween 2' },
+            { name: 'Big Bass Halloween 3' },
+            { name: 'Big Bass Halloween' },
+            { name: 'Big Bass Hold & Spinner Megaways' },
+            { name: 'Big Bass Mission Fishinâ€™' },
+            { name: 'Big Bass Raceday Repeat' },
+            { name: 'Big Bass Reel Repeat' },
+            { name: 'Big Bass Return to the Races' },
+            { name: 'Big Bass Secrets of the Golden Lake' },
+            { name: 'Big Bass Splash 1000' },
+            { name: 'Big Bass Splash' },
+            { name: 'Big Bass Trophy Catch' },
+            { name: 'Big Bass Vegas Double Down Deluxe' },
+            { name: 'Big Bass Xmas Xtreme' },
+            { name: 'Big Burger Load it up with Xtra cheese' },
+            { name: 'Big Juan' },
+            { name: 'Bigger Barn House Bonanza' },
+            { name: 'Bigger Bass Blizzard - Christmas Catch' },
+            { name: 'Bigger Bass Bonanza' },
+            { name: 'Bigger Bass Splash' },
+            { name: 'Bingo Mania' },
+            { name: 'Black Bull' },
+            { name: 'Blade & Fangs' },
+            { name: 'Blazing Wilds Megaways' },
+            { name: 'Blitz Super Wheel' },
+            { name: 'Bloody Dawn' },
+            { name: 'Bomb Bonanza' },
+            { name: 'Bonanza Gold' },
+            { name: 'Book of Aztec King' },
+            { name: 'Book of Fallen' },
+            { name: 'Book of Golden Sands' },
+            { name: 'Book Of Kingdoms' },
+            { name: 'Book of Monsters' },
+            { name: 'Bounty Gold' },
+            { name: 'Bounty Hunter' },
+            { name: 'Bow of Artemis' },
+            { name: 'Bubble Pop' },
+            { name: 'Buffalo King Megaways' },
+            { name: 'Buffalo King Untamed Megaways' },
+            { name: 'Buffalo King' },
+            { name: 'Bull Fiesta' },
+            { name: 'Busy Bees' },
+            { name: 'Caishen Cash' },
+            { name: 'Candy Blitz Bombs' },
+            { name: 'Candy Blitz' },
+            { name: 'Candy Corner' },
+            { name: 'Candy Jar Clusters' },
+            { name: 'Candy Stars' },
+            { name: 'Candy Village' },
+            { name: 'Captain Kraken Megaways' },
+            { name: 'Cash Bonanza' },
+            { name: 'Cash Box' },
+            { name: 'Cash Chips' },
+            { name: 'Cash Elevator' },
+            { name: 'Cash Patrol' },
+            { name: 'Cash Surge' },
+            { name: 'Castle of Fire' },
+            { name: 'Chase for Glory' },
+            { name: 'Cheeky Emperor' },
+            { name: 'Chests of Cai Shen 2' },
+            { name: 'Chests of Cai Shen' },
+            { name: 'Chicken Chase' },
+            { name: 'Chicken Drop' },
+            { name: 'Chilli Heat Megaways' },
+            { name: 'Chilli Heat Spicy Spins' },
+            { name: 'Chilli Heat' },
+            { name: 'Christmas Big Bass Bonanza' },
+            { name: 'Christmas Carol Megaways' },
+            { name: 'Cleocatra' },
+            { name: 'Clover Gold' },
+            { name: 'Club Tropicana - Happy Hour' },
+            { name: 'Club Tropicana' },
+            { name: 'Code of Cairo' },
+            { name: 'Coffee Wild' },
+            { name: 'Colossal Cash Zone' },
+            { name: 'Congo Cash XL' },
+            { name: 'Congo Cash' },
+            { name: 'Cosmic Cash' },
+            { name: 'Cowboy Coins' },
+            { name: 'Cowboys Gold' },
+            { name: 'Crank It Up' },
+            { name: 'Crown of Fire' },
+            { name: 'Crystal Caverns Megaways' },
+            { name: 'Cult' },
+            { name: 'Curse of the Werewolf Megaways' },
+            { name: 'Cyber Heist' },
+            { name: 'Cyber Pup Megaways' },
+            { name: 'Cyberheist City' },
+            { name: 'Cyclops Smash' },
+            { name: 'Da Vinci Treasure' },
+            { name: 'Dance Party' },
+            { name: 'Dark Overlord â€“ Final Duel' },
+            { name: 'Day of Dead' },
+            { name: 'Demon Pots' },
+            { name: 'Devilicious' },
+            { name: 'Diamond Cascade' },
+            { name: 'Diamond Strike' },
+            { name: 'Diamonds are Forever 3 Lines' },
+            { name: 'Diamonds of Egypt' },
+            { name: 'Ding Dong Christmas Bells' },
+            { name: 'Dino Drop' },
+            { name: 'Disco Lady' },
+            { name: 'DJ Neko' },
+            { name: 'Down The Rails' },
+            { name: 'Drago Jewels of Fortune' },
+            { name: 'Dragon Ball' },
+            { name: 'Dragon Gold 88' },
+            { name: 'Dragon Hero' },
+            { name: 'Dragon Hot Hold and Spin' },
+            { name: 'Dragon King Hot Pots' },
+            { name: 'Dragon Kingdom Eyes of Fire' },
+            { name: 'Dragon Kingdom' },
+            { name: 'Dragon Pots Megaways' },
+            { name: 'Dragon Tiger Fortunes' },
+            { name: 'Dragon Tiger' },
+            { name: 'Drill that Gold' },
+            { name: 'Duel of Night & Day' },
+            { name: 'Dwarf & Dragon' },
+            { name: 'Dwarven Gold Deluxe' },
+            { name: 'Dynamite Diggin Doug' },
+            { name: 'Egyptian Fortunes' },
+            { name: 'Elemental Gems Megaways' },
+            { name: 'Emerald King â€“ Wheel of Wealth' },
+            { name: 'Emerald King Rainbow Road' },
+            { name: 'Emerald King' },
+            { name: 'Emotiwins' },
+            { name: 'Emperor Caishen' },
+            { name: 'Empty the Bank!' },
+            { name: 'Escape the Pyramid â€“ Fire & Ice' },
+            { name: 'Eternal Empress - Freeze Time' },
+            { name: 'Excalibur Unleashed' },
+            { name: 'Extra Juicy Megaways' },
+            { name: 'Extra Juicy' },
+            { name: 'Eye of Cleopatra' },
+            { name: 'Eye of Spartacus' },
+            { name: 'Eye of the Storm' },
+            { name: 'Fairytale Fortune' },
+            { name: 'Fangtastic Freespins' },
+            { name: 'Fat Panda' },
+            { name: 'Fiesta Fortune' },
+            { name: 'Finger Lick\'n Free Spins' },
+            { name: 'Fire 88' },
+            { name: 'Fire Archer' },
+            { name: 'Fire Hot 100' },
+            { name: 'Fire Hot 20' },
+            { name: 'Fire Hot 40' },
+            { name: 'Fire Hot 5' },
+            { name: 'Fire Portals' },
+            { name: 'Fire Stampede 2' },
+            { name: 'Fire Stampede' },
+            { name: 'Fire Strike 2' },
+            { name: 'Fire Strike' },
+            { name: 'Firebird Spirit - Connect & Collect' },
+            { name: 'Fish Eye' },
+            { name: 'Fishin Reels' },
+            { name: 'Floating Dragon - Boat Festival' },
+            { name: 'Floating Dragon Megaways' },
+            { name: 'Floating Dragon New Year Festival Ultra Megaways' },
+            { name: 'Floating Dragon Wild Horses' },
+            { name: 'Floating Dragon' },
+            { name: 'Fonzoâ€™s Feline Fortunes' },
+            { name: 'Forge of Olympus' },
+            { name: 'Forging Wilds' },
+            { name: 'Fortune Ace Super Scatter' },
+            { name: 'Fortune Ace' },
+            { name: 'Fortune Dragon' },
+            { name: 'Fortune Hitâ€™n Roll' },
+            { name: 'Fortune of Aztec' },
+            { name: 'Fortune of Giza' },
+            { name: 'Fortune of Olympus' },
+            { name: 'Fortunes of Aztec' },
+            { name: 'Frightening Frankie' },
+            { name: 'Frogs & Bugs' },
+            { name: 'Frozen Tropics' },
+            { name: 'Fruit Party 2' },
+            { name: 'Fruit Party' },
+            { name: 'Fruit Rainbow' },
+            { name: 'Fruits of the Amazon' },
+            { name: 'Fruity Treats' },
+            { name: 'Fu Fu Fu' },
+            { name: 'Furry Bonanza Megaways' },
+            { name: 'Fury of Odin Megaways' },
+            { name: 'Gates of Aztec' },
+            { name: 'Gates of Gatot Kaca 1000' },
+            { name: 'Gates of Gatot Kaca Super Scatter' },
+            { name: 'Gates of Gatot Kaca' },
+            { name: 'Gates of Hades' },
+            { name: 'Gates of Olympus 1000 Dice' },
+            { name: 'Gates of Olympus 1000' },
+            { name: 'Gates of Olympus Dice' },
+            { name: 'Gates of Olympus Super Scatter' },
+            { name: 'Gates of Olympus Xmas 1000' },
+            { name: 'Gates of Olympus' },
+            { name: 'Gates of Pyroth' },
+            { name: 'Gates of Valhalla' },
+            { name: 'Gatot Kaca\'s Fury' },
+            { name: 'Gear of Horus' },
+            { name: 'Gem Elevator' },
+            { name: 'Gem Fire Fortune' },
+            { name: 'Gem Trio' },
+            { name: 'Gems Bonanza' },
+            { name: 'Gems of Serengeti' },
+            { name: 'Genieâ€™s Gem Bonanza' },
+            { name: 'Goblin Heist Powernudge' },
+            { name: 'Gods of Giza' },
+            { name: 'Gold Oasis' },
+            { name: 'Gold Party 2 - After Hours' },
+            { name: 'Gold Party' },
+            { name: 'Gold Rush' },
+            { name: 'Gold Train' },
+            { name: 'Golden Ox' },
+            { name: 'Golden Pig' },
+            { name: 'Good Luck & Good Fortune' },
+            { name: 'Gorilla Mayhem' },
+            { name: 'Grace of Ebisu' },
+            { name: 'Gravity Bonanza' },
+            { name: 'Great Lagoon' },
+            { name: 'Great Reef' },
+            { name: 'Great Rhino Deluxe' },
+            { name: 'Great Rhino Megaways' },
+            { name: 'Great Rhino' },
+            { name: 'Greedy Fortune Pig' },
+            { name: 'Greedy Wolf' },
+            { name: 'Greek Gods' },
+            { name: 'Hammerstorm' },
+            { name: 'Hand of Midas 2' },
+            { name: 'Happy Dragon' },
+            { name: 'Happy Nets' },
+            { name: 'Haunted Crypt' },
+            { name: 'Heart of Cleopatra' },
+            { name: 'Heart of Rio' },
+            { name: 'Heist for the Golden Nuggets' },
+            { name: 'Hellvis Wild' },
+            { name: 'Hercules and Pegasus' },
+            { name: 'Hercules Son of Zeus' },
+            { name: 'Heroic Spins' },
+            { name: 'Himalayan Wild' },
+            { name: 'Hockey Attack' },
+            { name: 'Hokkaido Wolf' },
+            { name: 'Holiday Ride' },
+            { name: 'Honey Honey Honey' },
+            { name: 'Hot Chilli' },
+            { name: 'Hot Fiesta' },
+            { name: 'Hot Pepper' },
+            { name: 'Hot Safari' },
+            { name: 'Hot to Burn â€“ 7 Deadly Free Spins' },
+            { name: 'Hot to Burn Extreme' },
+            { name: 'Hot to Burn Hold and Spin' },
+            { name: 'Hot to Burn Multiplier' },
+            { name: 'Hot to Burn' },
+            { name: 'Hot Tuna' },
+            { name: 'Hundreds and Thousands' },
+            { name: 'Ice Lobster' },
+            { name: 'Ice Mints' },
+            { name: 'Infective Wild' },
+            { name: 'Irish Charms' },
+            { name: 'Irish Crown' },
+            { name: 'Jackpot Blaze' },
+            { name: 'Jackpot Hunter' },
+            { name: 'Jade Butterfly' },
+            { name: 'Jane Hunter and the Mask of Montezuma' },
+            { name: 'Jasmine Dreams' },
+            { name: 'Jelly Candy' },
+            { name: 'Jelly Express' },
+            { name: 'Jewel Rush' },
+            { name: 'John Hunter & the Book of Tut Respin' },
+            { name: 'John Hunter and Galileoâ€™s Secrets' },
+            { name: 'John Hunter and the Book of Tut Megaways' },
+            { name: 'John Hunter and the Mayan Gods' },
+            { name: 'John Hunter and the Quest for Bermuda Riches' },
+            { name: 'John Hunter Aztec Treasure' },
+            { name: 'John Hunter Book of Tut' },
+            { name: 'John Hunter- Scarab Queen' },
+            { name: 'Joker Jewels Dice' },
+            { name: 'Joker King' },
+            { name: 'Joker Race' },
+            { name: 'Jokerâ€™s Jewels Cash' },
+            { name: 'Jokerâ€™s Jewels Hot' },
+            { name: 'Jokerâ€™s Jewels Wild' },
+            { name: 'Jokers Jewels Hold & Spin' },
+            { name: 'Joker\'s Jewels' },
+            { name: 'Journey to the West' },
+            { name: 'Juicy Fruits Multihold' },
+            { name: 'Juicy Fruits' },
+            { name: 'Jumbo Safari' },
+            { name: 'Jungle Gorilla' },
+            { name: 'Kadita Ocean Fury' },
+            { name: 'King of Spear' },
+            { name: 'Kingdom of Asgard' },
+            { name: 'Kingdom of the Dead' },
+            { name: 'Knight Hot Spotz' },
+            { name: 'Knights vs Barbarians' },
+            { name: 'Koi Pond' },
+            { name: 'Kraken\'s Sky Bounty' },
+            { name: 'Lady Godiva' },
+            { name: 'Lamp of Infinity' },
+            { name: 'Lava Balls' },
+            { name: 'Legend of Heroes Megaways' },
+            { name: 'Leprechaun Carol' },
+            { name: 'Leprechaun Song' },
+            { name: 'Little Gem' },
+            { name: 'Lobster Bobâ€™s Crazy Crab Shack' },
+            { name: 'Lobster Bobâ€™s Sea Food and Win It' },
+            { name: 'Lobster House' },
+            { name: 'Lokiâ€™s Riches' },
+            { name: 'Lucky Dice' },
+            { name: 'Lucky Dog' },
+            { name: 'Lucky Dragons' },
+            { name: 'Lucky Fishing Megaways' },
+            { name: 'Lucky Fortune Tree' },
+            { name: 'Lucky Grace And Charm' },
+            { name: 'Lucky Lightning' },
+            { name: 'Lucky Monkey' },
+            { name: 'Lucky Mouse' },
+            { name: 'Lucky New Year Tiger Treasures' },
+            { name: 'Lucky New Year' },
+            { name: 'Lucky Ox' },
+            { name: 'Lucky Panda' },
+            { name: 'Lucky Phoenix' },
+            { name: 'Lucky Tiger 1000' },
+            { name: 'Lucky Tiger Gold' },
+            { name: 'Lucky Tiger' },
+            { name: 'Luckyâ€™s Wild Pub 2' },
+            { name: 'Luckyâ€™s Wild Pub' },
+            { name: 'Madame Destiny Megaways' },
+            { name: 'Madame Destiny' },
+            { name: 'Magic Journey' },
+            { name: 'Magic Money Maze' },
+            { name: 'Magicians Secrets' },
+            { name: 'Mahjong Panda' },
+            { name: 'Mahjong Wins - Gong Xi Fa Cai' },
+            { name: 'Mahjong Wins 2' },
+            { name: 'Mahjong Wins 3 - Black Scatter' },
+            { name: 'Mahjong Wins Bonus' },
+            { name: 'Mahjong Wins' },
+            { name: 'Majestic Express  Gold Run' },
+            { name: 'Mammoth Gold Megaways' },
+            { name: 'Master Chen Fortune' },
+            { name: 'Master Gems' },
+            { name: 'Master Joker' },
+            { name: 'Medusaâ€™s Stone' },
+            { name: 'Mermaidâ€™s Treasure Trove' },
+            { name: 'Might of Freya Megaways' },
+            { name: 'Might of Ra' },
+            { name: 'Mighty Kong' },
+            { name: 'Mighty Munching Melons' },
+            { name: 'Mining Rush' },
+            { name: 'Mochimon' },
+            { name: 'Moleionaire' },
+            { name: 'Money Money Money' },
+            { name: 'Money Mouse' },
+            { name: 'Money Stacks Dice' },
+            { name: 'Money Stacks Megaways' },
+            { name: 'Money Stacks' },
+            { name: 'Monkey Madness' },
+            { name: 'Monkey Warrior' },
+            { name: 'Monster Superlanche' },
+            { name: 'Moonshot' },
+            { name: 'Muertos Multiplier Megaways' },
+            { name: 'Mummyâ€™s Jewels 100' },
+            { name: 'Mummy\'s Jewels' },
+            { name: 'Mustang Gold Megaways' },
+            { name: 'Mustang Gold' },
+            { name: 'Mustang Trail' },
+            { name: 'Mysterious Egypt' },
+            { name: 'Mysterious' },
+            { name: 'Mystery Mice' },
+            { name: 'Mystery Of The Orient' },
+            { name: 'Mystic Chief' },
+            { name: 'Mystic Wishes' },
+            { name: 'Nile Fortunes' },
+            { name: 'North Guardians' },
+            { name: 'Octobeer Fortunes' },
+            { name: 'Odds On Winner' },
+            { name: 'Old Gold Miner Megaways' },
+            { name: 'Olympus Wins' },
+            { name: 'Oodles of Noodles' },
+            { name: 'Oracle of Gold' },
+            { name: 'Panda Fortune 2' },
+            { name: 'Panda Fortune' },
+            { name: 'Pandemic Rising' },
+            { name: 'Peking Luck' },
+            { name: 'Penguins Christmas Party Time' },
+            { name: 'Peppeâ€™s Pepperoni Pizza Plaza' },
+            { name: 'Phoenix Forge' },
+            { name: 'Pig Farm' },
+            { name: 'Piggy Bank Bills' },
+            { name: 'Piggy Bankers' },
+            { name: 'Pinup Girls' },
+            { name: 'Pirate Gold Deluxe' },
+            { name: 'Pirate Gold' },
+            { name: 'Pirate Golden Age' },
+            { name: 'Pirates Pub' },
+            { name: 'Pixie Wings' },
+            { name: 'PIZZA! PIZZA PIZZA!' },
+            { name: 'Plushie Wins' },
+            { name: 'Pompeii Megareels Megaways' },
+            { name: 'Pot of Fortune' },
+            { name: 'Power of Merlin Megaways' },
+            { name: 'Power of Ninja' },
+            { name: 'Power of Thor Megaways' },
+            { name: 'Pub Kings' },
+            { name: 'Pyramid Bonanza' },
+            { name: 'Pyramid King' },
+            { name: 'Queen of Gods' },
+            { name: 'Queenie' },
+            { name: 'Rabbit Garden' },
+            { name: 'Raging Bull' },
+            { name: 'Raging Waterfall Megaways' },
+            { name: 'Rainbow Gold' },
+            { name: 'Rainbow Reels' },
+            { name: 'Reel Banks' },
+            { name: 'Release the Bison' },
+            { name: 'Release the Kraken 2' },
+            { name: 'Release the Kraken Megaways' },
+            { name: 'Release the Kraken' },
+            { name: 'Resurrecting Riches' },
+            { name: 'Return of the Dead' },
+            { name: 'Revenge of Loki Megaways' },
+            { name: 'Ride The Lightning' },
+            { name: 'Ripe Rewards' },
+            { name: 'Rise of Giza PowerNudge' },
+            { name: 'Rise of Pyramids' },
+            { name: 'Rise of Samurai 4' },
+            { name: 'Rise of Samurai III' },
+            { name: 'Rise of Samurai Megaways' },
+            { name: 'Rise of Samurai' },
+            { name: 'Robber Strike' },
+            { name: 'Rock Vegas' },
+            { name: 'Rocket Blast Megaways' },
+            { name: 'Rolling in Treasures' },
+            { name: 'Rujak Bonanza' },
+            { name: 'Running Sushi' },
+            { name: 'Safari King' },
+            { name: 'Samurai Code' },
+            { name: 'Santa' },
+            { name: 'Santaâ€™s Slay' },
+            { name: 'Santa\'s Great Gifts' },
+            { name: 'Santa\'s Wonderland' },
+            { name: 'Santa\'s Xmas Rush' },
+            { name: 'Savannah Legend' },
+            { name: 'Sea Fantasy' },
+            { name: 'Secret City Gold' },
+            { name: 'Shield Of Sparta' },
+            { name: 'Shining Hot 100' },
+            { name: 'Shining Hot 20' },
+            { name: 'Shining Hot 40' },
+            { name: 'Shining Hot 5' },
+            { name: 'Sleeping Dragon' },
+            { name: 'Smugglers Cove' },
+            { name: 'Snakes & Ladders - Snake Eyes' },
+            { name: 'Snakes and Ladders Megadice' },
+            { name: 'Snow Party' },
+            { name: 'Spartan King' },
+            { name: 'Spellbinding Mystery' },
+            { name: 'Spellmaster' },
+            { name: 'Spin & Score Megaways' },
+            { name: 'Spirit of Adventure' },
+            { name: 'Star Bounty' },
+            { name: 'Star Pirates Code' },
+            { name: 'Starlight Archer 1000' },
+            { name: 'Starlight Christmas' },
+            { name: 'Starlight Princess 1000' },
+            { name: 'Starlight Princess Pachi' },
+            { name: 'Starlight Princess Super Scatter' },
+            { name: 'Starlight Princess' },
+            { name: 'Starlight Wins' },
+            { name: 'Starz Megaways' },
+            { name: 'Steamin Reels' },
+            { name: 'Sticky Bees' },
+            { name: 'Strawberry Cocktail' },
+            { name: 'Street Racer' },
+            { name: 'Striking Hot 5' },
+            { name: 'Sugar Rush 1000' },
+            { name: 'Sugar Rush Dice' },
+            { name: 'Sugar Rush Super Scatter' },
+            { name: 'Sugar Rush Xmas' },
+            { name: 'Sugar Rush' },
+            { name: 'Sugar Supreme Powernudge' },
+            { name: 'Sumo Supreme Megaways' },
+            { name: 'Super 7s' },
+            { name: 'Super Gummy Strike' },
+            { name: 'Super Joker' },
+            { name: 'Super Tiki Strike' },
+            { name: 'Super X' },
+            { name: 'Sweet Bonanza 1000 Dice' },
+            { name: 'Sweet Bonanza 1000' },
+            { name: 'Sweet Bonanza Dice' },
+            { name: 'Sweet Bonanza Super Scatter' },
+            { name: 'Sweet Bonanza Xmas' },
+            { name: 'Sweet Bonanza' },
+            { name: 'Sweet Burst' },
+            { name: 'Sweet Craze' },
+            { name: 'Sweet Kingdom' },
+            { name: 'Sweet Powernudge' },
+            { name: 'Sweet Rush Bonanza' },
+            { name: 'Sword of Ares' },
+            { name: 'Temple Guardians' },
+            { name: 'Temujin Treasures' },
+            { name: 'The Alter Ego' },
+            { name: 'The Big Dawgs' },
+            { name: 'The Dog House - Muttley Crew' },
+            { name: 'The Dog House - Royal Hunt' },
+            { name: 'The Dog House â€“ Dog or Alive' },
+            { name: 'The Dog House Dice Show' },
+            { name: 'The Dog House Megaways' },
+            { name: 'The Dog House Multihold' },
+            { name: 'The Dog House' },
+            { name: 'The Great Chicken Escape' },
+            { name: 'The Great Stick-Up' },
+            { name: 'The Hand of Midas' },
+            { name: 'The Knight King' },
+            { name: 'The Magic Cauldron Enchanted Brew' },
+            { name: 'The Money Men Megaways' },
+            { name: 'The Red Queen' },
+            { name: 'The Tiger Warrior' },
+            { name: 'The Tweety House' },
+            { name: 'The Ultimate 5' },
+            { name: 'The Wild Gang' },
+            { name: 'The Wild Machine' },
+            { name: 'Three Star Fortune' },
+            { name: 'Tic Tac Take' },
+            { name: 'Timber Stacks' },
+            { name: 'Tiny Toads' },
+            { name: 'Towering Fortunes' },
+            { name: 'Train to Seoul' },
+            { name: 'Treasure Horse' },
+            { name: 'Treasure Wild' },
+            { name: 'Treasures of Osiris' },
+            { name: 'Tree of Riches' },
+            { name: 'Trees of Treasure' },
+            { name: 'Triple Dragons' },
+            { name: 'Triple Pot Diamond' },
+            { name: 'Triple Pot Gold' },
+            { name: 'Triple Tigers' },
+            { name: 'Tropical Tiki' },
+            { name: 'Tundraâ€™s Fortune' },
+            { name: 'Tutâ€™s Treasure Tower' },
+            { name: 'Twilight Princess' },
+            { name: 'Ultra Burn Dice' },
+            { name: 'Ultra Burn' },
+            { name: 'Ultra Hold and Spin' },
+            { name: 'Vampires vs Wolves' },
+            { name: 'Vampy Party' },
+            { name: 'Vegas Magic' },
+            { name: 'Vegas Nights' },
+            { name: 'Viking Forge' },
+            { name: 'Volcano Goddess' },
+            { name: 'Voodoo Magic' },
+            { name: 'Waves of Poseidon' },
+            { name: 'Wealthy Frog' },
+            { name: 'Wheel of Happiness' },
+            { name: 'Wheel O\'Gold' },
+            { name: 'Wild Beach Party' },
+            { name: 'Wild Bison Charge' },
+            { name: 'Wild Booster' },
+            { name: 'Wild Celebrity Bus Megaways' },
+            { name: 'Wild Depths' },
+            { name: 'Wild Gladiator' },
+            { name: 'Wild Hop & Drop' },
+            { name: 'Wild Pixie' },
+            { name: 'Wild Skullz' },
+            { name: 'Wild Spells' },
+            { name: 'Wild Walker' },
+            { name: 'Wild West Duels' },
+            { name: 'Wild West Gold Blazing Bounty' },
+            { name: 'Wild West Gold Megaways' },
+            { name: 'Wild West Gold' },
+            { name: 'Wild Wild Bananas' },
+            { name: 'Wild Wild Joker' },
+            { name: 'Wild Wild Pearls' },
+            { name: 'Wild Wild Riches Returns' },
+            { name: 'Wild Wild Riches' },
+            { name: 'Wild Wildebeest Wins' },
+            { name: 'Wildies' },
+            { name: 'Wildman Super Bonanza' },
+            { name: 'Wisdom of Athena 1000 Xmas' },
+            { name: 'Wisdom of Athena 1000' },
+            { name: 'Wisdom of Athena' },
+            { name: 'Witch Heart Megaways' },
+            { name: 'Wolf Gold 4 Pack' },
+            { name: 'Wolf Gold Dice' },
+            { name: 'Wolf Gold Ultimate' },
+            { name: 'Wolf Gold' },
+            { name: 'Wrath of Nezha' },
+            { name: 'Wukong Rush' },
+            { name: 'Year of the Dragon King' },
+            { name: 'Yeti Quest' },
+            { name: 'You Can Piggy Bank On It' },
+            { name: 'Yum Yum Powerways' },
+            { name: 'Zeus vs Hades - Gods of War' },
+            { name: 'Zeus vs Typhon' },
+            { name: 'Zombie Carnival' },
+            { name: 'Zombie School Megaways' }
+        ];
+
+        window.providerDashboardConfig = {
+            providerKey: 'pragmaticplay',
+            imageFolder: 'assets/images/pragmatic',
+            gamesData: gamesData,
+            polaPreset: 'symbols-dc',
+            polaTitleMode: 'plain',
+            modeList: ['MANUAL', 'AUTO'],
+            modeData: {
+                AUTO: [10, 20, 30, 50],
+                MANUAL: [15, 25, 35, 45]
+            },
+            symbolOnText: '\u2705',
+            symbolOffText: '\u274C',
+            symbolOnText: '✅',
+            symbolOffText: '❌',
+            dcOptions: ['DC ON', 'DC OFF'],
+            symbolOnText: '\u2705',
+            symbolOffText: '\u274C'
+        };
+    </script>
+    <script src="assets/js/provider-dashboard.js"></script>
+</body>
+</html>
