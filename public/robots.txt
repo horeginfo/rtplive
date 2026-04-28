@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: https://yukkk.rtpdetik.it.com/public/sitemap.xml
+Sitemap: https://rtplive.vercel.app/sitemap.xml
